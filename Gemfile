@@ -1,10 +1,10 @@
 source 'https://rubygems.org'
 
-gem 'rails', '3.2.13'
+gem 'rails', '~>3.2.0'
 
 group :assets do
   gem 'stylus'
-  gem 'uglifier', '>= 1.0.3'
+  gem 'uglifier'
   gem 'yui-compressor'
 end
 
@@ -13,12 +13,8 @@ gem 'haml-rails'
 gem 'jquery-rails'
 gem 'thin'
 
-group :test do
-  # Pretty printed test output
-  gem 'turn', :require => false
-end
-
-group :development do
+group :test, :development do
+  gem 'konacha'
   gem 'sqlite3'
   gem 'pry'
   gem 'pry-nav'
