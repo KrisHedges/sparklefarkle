@@ -27,7 +27,7 @@
 dice = []
 numberOfDice = 6
 
-dice_list = $('#dice')
+dice_list = $('#dice-list')
 roller = $('.roller')
 player1 = $('.player1')
 player2 = $('.player2')
@@ -40,7 +40,6 @@ window.spark =
     dice
 
   isTriple: (n)->
-    console.log dice
     triples = _.filter dice, (i)->
         n is i
     if triples.length >= 3

@@ -13,10 +13,7 @@ describe 'spark.rollDice', ->
 
   it 'Should only contain whole numbers that are between 1 and 6.', ->
     evaluate = (n)->
-      if n >= 1 and n <=6
-        true
-      else
-        throw new Error(n + ' is not >=1 or <=6')
+      (n).should.be.within(1,6)
     # Evaluate Three random rolls
     evaluate n for n in spark.rollDice()
     evaluate n for n in spark.rollDice()
@@ -33,10 +30,16 @@ describe 'spark.isScorable', ->
 
 describe 'spark.isTriple', ->
 
-  it "Should return true if the given value is found 3 or more times in the dice roll", ->
+  # This test is failing because the dice array is not being set here.
+  # The value of dice is being carried over from the earlier tests and
+  # my attempt to set it here doesn't work. The function 'isTriple'
+  # does appear to be working correctly however.
+
+  beforeEach ->
     dice = [1,2,2,2,4,5]
+
+  it "Should return true if the given value is found 3 or more times in the dice roll", ->
     spark.isTriple(2).should.be.true
 
   it "Should return false if the given value is not found 3 or more times in the dice roll", ->
-    dice = [1,2,2,2,4,5]
     spark.isTriple(4).should.be.false
