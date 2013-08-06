@@ -16,13 +16,75 @@
 # Three 6s	600
 #
 # 10,000 points to win
+
+# player 1 rolls six dice
+# then player 1 must choose scoring dice to keep
+# then player 1 rolls remaining dice scores them repeating until all dice have # been scored or no scorable points arise.
 #
-window.spark = {}
+# Then it is player 2's turn to do the same.
+# This will continue until the first player reaches 10,000 points
 
 dice = []
+numberOfDice = 6
 
-spark.rollDice = (n)->
-  dice =[]
-  n = 6 unless n != undefined
-  dice.push Math.floor(Math.random()*6 + 1) for [1..n]
-  return dice
+dice_list = $('#dice')
+roller = $('.roller')
+player1 = $('.player1')
+player2 = $('.player2')
+
+window.spark =
+  rollDice: (n)->
+    dice = []
+    n = numberOfDice unless n != undefined
+    dice.push Math.floor(Math.random()*6 + 1) for [1..n]
+    dice
+
+  isTriple: (n)->
+    console.log dice
+    triples = _.filter dice, (i)->
+        n is i
+    if triples.length >= 3
+      true
+    else
+      false
+
+  isScorable: (n)->
+      if n is 1
+        true
+      else if n is 5
+        true
+      else
+        false
+
+  showDice: (dice)->
+    dice_list.empty()
+    for n in dice
+      if this.isScorable(n) and this.isTriple(n)
+        dice_list.append("<li data-value='#{n}' class='scorable triple#{n}'></li>")
+      else if this.isTriple(n)
+        dice_list.append("<li data-value='#{n}' class='scorable triple#{n}'></li>")
+      else if this.isScorable(n)
+        dice_list.append("<li data-value='#{n}' class='scorable'></li>")
+      else
+        dice_list.append("<li data-value='#{n}'></li>")
+
+  setPlayer: (player)->
+    if player is 1
+      $('.currentplayer').removeClass('currentplayer')
+      $('.player1').addClass('currentplayer')
+    if player is 2
+      $('.currentplayer').removeClass('currentplayer')
+      $('.player2').addClass('currentplayer')
+
+  rollEm: (n)->
+    n = numberOfDice unless n != undefined
+    dice = this.rollDice(n)
+    this.showDice(dice)
+
+roller.on 'click', ->
+  spark.rollEm(numberOfDice)
+
+dice_list.on 'click', 'li', ->
+  n = $(this).attr('data-value')
+
+spark.setPlayer(1)
