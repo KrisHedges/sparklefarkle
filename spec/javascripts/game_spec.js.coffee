@@ -30,16 +30,24 @@ describe 'spark.isScorable', ->
 
 describe 'spark.isTriple', ->
 
-  # This test is failing because the dice array is not being set here.
-  # The value of dice is being carried over from the earlier tests and
-  # my attempt to set it here doesn't work. The function 'isTriple'
-  # does appear to be working correctly however.
-
-  beforeEach ->
-    dice = [1,2,2,2,4,5]
-
   it "Should return true if the given value is found 3 or more times in the dice roll", ->
-    spark.isTriple(2).should.be.true
+    dice = [1,2,2,2,4,5]
+    spark.isTriple(2, dice).should.be.true
 
   it "Should return false if the given value is not found 3 or more times in the dice roll", ->
-    spark.isTriple(4).should.be.false
+    dice = [1,2,3,2,4,5]
+    spark.isTriple(4, dice).should.be.false
+
+
+describe 'spark.isFarked', ->
+  it "Should return true if there are no scorable dice in the dice roll.", ->
+    dice = [2,4,3,6,2,3]
+    spark.isFarked(dice).should.be.true
+
+  it "Should return false if there is at least one scorable die in the dice roll.", ->
+    dice = [2,4,3,6,2,1]
+    spark.isFarked(dice).should.be.false
+
+  it "Should return false if there is at least one scorable triple in the dice roll.", ->
+    dice = [2,4,2,6,2,3]
+    spark.isFarked(dice).should.be.false

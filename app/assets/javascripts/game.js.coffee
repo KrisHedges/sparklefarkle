@@ -39,7 +39,7 @@ window.spark =
     dice.push Math.floor(Math.random()*6 + 1) for [1..n]
     dice
 
-  isTriple: (n)->
+  isTriple: (n, dice)->
     triples = _.filter dice, (i)->
         n is i
     if triples.length >= 3
@@ -55,17 +55,29 @@ window.spark =
       else
         false
 
+  isFarked: (dice)->
+    farked = _.every dice, (n)->
+      if spark.isScorable(n)
+        false
+      else if spark.isTriple(n, dice)
+        false
+      else
+        true
+    farked
+
   showDice: (dice)->
     dice_list.empty()
     for n in dice
-      if this.isScorable(n) and this.isTriple(n)
+      if this.isScorable(n) and this.isTriple(n, dice)
         dice_list.append("<li data-value='#{n}' class='scorable triple#{n}'></li>")
-      else if this.isTriple(n)
+      else if this.isTriple(n, dice)
         dice_list.append("<li data-value='#{n}' class='scorable triple#{n}'></li>")
       else if this.isScorable(n)
         dice_list.append("<li data-value='#{n}' class='scorable'></li>")
       else
         dice_list.append("<li data-value='#{n}'></li>")
+    if this.isFarked(dice)
+      dice_list.append("<h2>Farkle!</h2>")
 
   setPlayer: (player)->
     if player is 1
