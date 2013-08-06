@@ -29,7 +29,6 @@ describe 'spark.isScorable', ->
     spark.isScorable(6).should.be.false
 
 describe 'spark.isTriple', ->
-
   it "Should return true if the given value is found 3 or more times in the dice roll", ->
     dice = [1,2,2,2,4,5]
     spark.isTriple(2, dice).should.be.true

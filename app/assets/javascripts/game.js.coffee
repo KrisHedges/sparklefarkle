@@ -92,10 +92,21 @@ window.spark =
     dice = this.rollDice(n)
     this.showDice(dice)
 
-roller.on 'click', ->
-  spark.rollEm(numberOfDice)
+firstRun = ->
+  roller.on 'click', ->
+    spark.rollEm(numberOfDice)
 
-dice_list.on 'click', 'li', ->
-  n = $(this).attr('data-value')
+  dice_list.on 'click', 'li', ->
+    el = $(this)
+    n = el.attr('data-value')
+    triple = "triple" +n
+    triples = $("."+triple+":lt(3)")
+    if el.hasClass(triple)
+      triples.addClass('keeper')
+    if el.hasClass('scorable') and not el.hasClass(triple)
+      el.addClass('keeper')
 
-spark.setPlayer(1)
+
+
+  spark.setPlayer(1)
+firstRun()
