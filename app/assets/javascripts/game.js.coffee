@@ -2,34 +2,14 @@
 # All this logic will automatically be available in application.js.
 # You can use CoffeeScript in this file: http://jashkenas.github.com/coffee-script/
 
-# Basic Farkle
-#
-# Rules
-# 6 Dice
-# Each 1	100
-# Each 5	50
-# Three 1s	1000
-# Three 2s	200
-# Three 3s	300
-# Three 4s	400
-# Three 5s	500
-# Three 6s	600
-#
-# 10,000 points to win
-#
-# then player 1 must choose scoring dice to keep
-# then player 1 rolls remaining dice scores them repeating until all dice have # been scored or no scorable points arise.
-# Then it is player 2's turn to do the same.
-# This will continue until the first player reaches 10,000 points
-
 dice_list = $('#dice-list')
 gameboard = $('#gameboard')
 roller = $('.roller')
+roll = $('.roll')
 player1 = $('.player1')
 player2 = $('.player2')
 table = $('#table')
 tablescore = table.find('.score')
-
 diceleft = 6
 
 window.spark =
@@ -59,14 +39,15 @@ window.spark =
       this.player2score += points
       $('.player2 .score').html this.player2score
 
-  resetScore: ->
+  resetGame: ->
     score = 0
     this.player1score = score
     this.player2score = score
+    this.setPlayer(1)
+    this.resetTable()
     $('.player1 .score').html score
     $('.player2 .score').html score
-    this.setPlayer(this.currentplayer)
-    this.resetTable()
+    dice_list.html "<h1 class='roller'>Player 1 Roll Em!</h1>"
 
   resetTable: ->
     diceleft = this.numberOfDice
@@ -83,15 +64,24 @@ window.spark =
     this.exchangeTurn()
 
   exchangeTurn: ->
-    p = "Player 1"
-    this.resetTable()
-    if this.currentplayer is 1
-      this.setPlayer(2)
-      p = "Player 2"
+    if this.player1score >= 10000
+      this.winner(1,this.player1score)
+    else if this.player2score >= 10000
+      this.winner(2,this.player2score)
     else
-      this.setPlayer(1)
       p = "Player 1"
-    dice_list.html "<h1 class='roller'>#{p} Roll Em!</h1>"
+      this.resetTable()
+      if this.currentplayer is 1
+        this.setPlayer(2)
+        p = "Player 2"
+      else
+        this.setPlayer(1)
+        p = "Player 1"
+      dice_list.html "<h1 class='roller'>#{p} Roll Em!</h1>"
+
+  winner: (player, score)->
+    this.resetGame()
+    alert "Player #{player} Wins! #{score}"
 
   rollDice: (n)->
     this.dice = []
@@ -99,10 +89,29 @@ window.spark =
     this.dice.push Math.floor(Math.random()*6 + 1) for [1..n]
     this.dice
 
+  rollEm: (n)->
+    diceinplay = dice_list.find('li')
+    throwEm = (ctx)->
+      n = ctx.numberOfDice unless n != undefined
+      dice = ctx.rollDice(n)
+      ctx.showDice(dice)
+    if diceinplay.length is 0
+      throwEm(this)
+    else
+      throwEm(this) unless dice_list.find('li').hasClass('keeper') is false
+
   isTriple: (n, dice)->
     triples = _.filter dice, (i)->
         n is i
     if triples.length >= 3
+      true
+    else
+      false
+
+  isYahtzee: (n, dice)->
+    sext = _.filter dice, (i)->
+        n is i
+    if sext.length >= 6
       true
     else
       false
@@ -128,8 +137,8 @@ window.spark =
   showDice: (dice)->
     dice_list.empty()
     for n in dice
-      if this.isScorable(n) and this.isTriple(n, dice)
-        dice_list.append("<li data-value='#{n}' class='scorable triple#{n}'></li>")
+      if this.isYahtzee(n,dice)
+        dice_list.append("<li data-value='#{n}' class='yahtzee'></li>")
       else if this.isTriple(n, dice)
         dice_list.append("<li data-value='#{n}' class='scorable triple#{n}'></li>")
       else if this.isScorable(n)
@@ -137,50 +146,52 @@ window.spark =
       else
         dice_list.append("<li data-value='#{n}'></li>")
     if this.isFarked(dice)
-      dice_list.append("<h2>Farkle!</h2>")
-      setTimeout ->
-        spark.exchangeTurn()
-      , 800
+      alert "Farkle! You've lost it all!"
+      this.exchangeTurn()
 
-  rollEm: (n)->
-    n = this.numberOfDice unless n != undefined
-    dice = this.rollDice(n)
-    this.showDice(dice)
+$(document).ready ->
+  init = ->
+    spark.setPlayer(spark.currentplayer)
 
-init = ->
-  spark.setPlayer(spark.currentplayer)
+    gameboard.on 'click', '.roller, .roll', ->
+      if diceleft is 0
+        diceleft = 6
+      spark.rollEm(diceleft)
 
-  gameboard.on 'click', '.roller, .roll ', ->
-    if diceleft is 0
-      alert "Hot Dice!"
-      diceleft = 6
-    spark.rollEm(diceleft)
+    gameboard.on 'click', '.bank', ->
+      spark.bankIt(spark.table)
 
-  gameboard.on 'click', '.bank', ->
-    spark.bankIt(spark.table)
-
-  dice_list.on 'click', 'li', ->
-    el = $(this)
-    n = el.attr('data-value')
-    triple = "triple" +n
-    triples = $("."+triple)
-    if el.hasClass('scorable')
-      unless el.hasClass('keeper')
-        if el.hasClass(triple)
-          diceleft -= 3
-          if n is '1'
-            spark.tableIt(1000)
-          else
-            spark.tableIt(n * 100)
-          triples.addClass('keeper')
-        unless el.hasClass(triple)
-          diceleft -= 1
-          if el.hasClass('scorable')
+    dice_list.on 'click', 'li', ->
+      el = $(this)
+      n = el.attr('data-value')
+      yahtzees = $(".yahtzee")
+      triple = "triple" +n
+      triples = $("."+triple+":lt(3)")
+      beyondtriple = $("."+triple+":gt(2)")
+      if el.hasClass('yahtzee')
+        spark.winner(1,"Via Nuclear Yahtzee! 1,000,000 points")
+      if el.hasClass('scorable')
+        unless el.hasClass('keeper')
+          if el.hasClass(triple)
+            diceleft -= 3
             if n is '1'
-              spark.tableIt(100)
+              spark.tableIt(1000)
+              beyondtriple.removeClass(triple)
+            else if n is '5'
+              spark.tableIt(n * 100)
+              beyondtriple.removeClass(triple)
             else
-              spark.tableIt(50)
-            el.addClass('keeper')
-
-
-init()
+              spark.tableIt(n * 100)
+              beyondtriple.removeClass('scorable ' + triple)
+            triples.addClass('keeper')
+          unless el.hasClass(triple)
+            diceleft -= 1
+            if el.hasClass('scorable')
+              if n is '1'
+                spark.tableIt(100)
+              else
+                spark.tableIt(50)
+              el.addClass('keeper')
+      if diceleft is 0
+        alert "Hot Dice! You can roll em all again."
+  init()

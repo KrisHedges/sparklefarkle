@@ -71,13 +71,13 @@ describe 'spark.updatePlayerScore(points)', ->
     spark.updatePlayerScore(1000)
     spark.player1score.should.equal(2000)
 
-describe 'spark.resetScore()', ->
+describe 'spark.resetGame()', ->
   before ->
     spark.setPlayer(1)
     spark.updatePlayerScore(1000)
     spark.setPlayer(2)
     spark.updatePlayerScore(1000)
-    spark.resetScore()
+    spark.resetGame()
 
   it "Should reset both player scores to zero", ->
     spark.player1score.should.equal(0)
@@ -85,3 +85,31 @@ describe 'spark.resetScore()', ->
 
   it "Should set cuurent player to player 1", ->
     spark.currentplayer.should.equal(1)
+
+describe 'spark.resetTable()', ->
+  before ->
+    spark.tableIt(1000)
+    spark.resetTable()
+  it "Should reset the table to 0", ->
+    spark.table.should.equal(0)
+
+describe 'spark.tableIt(points)', ->
+  before ->
+    spark.resetTable()
+    spark.tableIt(1000)
+  it "Should add the given points to spark.table", ->
+    spark.table.should.equal(1000)
+
+describe 'spark.bankIt(points)', ->
+  before ->
+    spark.resetGame()
+    spark.bankIt(1000)
+
+  it "Should add the given points to the current players score", ->
+    spark.player1score.should.equal(1000)
+
+  it "Should reset the table to 0", ->
+    spark.table.should.equal(0)
+
+  it "Should change the current player to the opponent", ->
+    spark.currentplayer.should.equal(2)
