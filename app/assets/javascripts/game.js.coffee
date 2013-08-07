@@ -23,13 +23,19 @@
 # This will continue until the first player reaches 10,000 points
 
 dice_list = $('#dice-list')
+gameboard = $('#gameboard')
 roller = $('.roller')
 player1 = $('.player1')
 player2 = $('.player2')
+table = $('#table')
+tablescore = table.find('.score')
+
+diceleft = 6
 
 window.spark =
   dice: []
   currentplayer: 1
+  table: 0
   player1score: 0
   player2score: 0
   numberOfDice: 6
@@ -59,7 +65,33 @@ window.spark =
     this.player2score = score
     $('.player1 .score').html score
     $('.player2 .score').html score
-    this.setPlayer(1)
+    this.setPlayer(this.currentplayer)
+    this.resetTable()
+
+  resetTable: ->
+    diceleft = this.numberOfDice
+    this.table = 0
+    this.tableIt(0)
+
+  tableIt: (points)->
+    this.table += points
+    tablescore.html this.table
+
+  bankIt: (points)->
+    this.updatePlayerScore(points)
+    this.resetTable()
+    this.exchangeTurn()
+
+  exchangeTurn: ->
+    p = "Player 1"
+    this.resetTable()
+    if this.currentplayer is 1
+      this.setPlayer(2)
+      p = "Player 2"
+    else
+      this.setPlayer(1)
+      p = "Player 1"
+    dice_list.html "<h1 class='roller'>#{p} Roll Em!</h1>"
 
   rollDice: (n)->
     this.dice = []
@@ -106,6 +138,9 @@ window.spark =
         dice_list.append("<li data-value='#{n}'></li>")
     if this.isFarked(dice)
       dice_list.append("<h2>Farkle!</h2>")
+      setTimeout ->
+        spark.exchangeTurn()
+      , 800
 
   rollEm: (n)->
     n = this.numberOfDice unless n != undefined
@@ -115,17 +150,37 @@ window.spark =
 init = ->
   spark.setPlayer(spark.currentplayer)
 
-  roller.on 'click', ->
-    spark.rollEm(spark.numberOfDice)
+  gameboard.on 'click', '.roller, .roll ', ->
+    if diceleft is 0
+      alert "Hot Dice!"
+      diceleft = 6
+    spark.rollEm(diceleft)
+
+  gameboard.on 'click', '.bank', ->
+    spark.bankIt(spark.table)
 
   dice_list.on 'click', 'li', ->
     el = $(this)
     n = el.attr('data-value')
     triple = "triple" +n
-    triples = $("."+triple+":lt(3)")
-    if el.hasClass(triple)
-      triples.addClass('keeper')
-    if el.hasClass('scorable') and not el.hasClass(triple)
-      el.addClass('keeper')
+    triples = $("."+triple)
+    if el.hasClass('scorable')
+      unless el.hasClass('keeper')
+        if el.hasClass(triple)
+          diceleft -= 3
+          if n is '1'
+            spark.tableIt(1000)
+          else
+            spark.tableIt(n * 100)
+          triples.addClass('keeper')
+        unless el.hasClass(triple)
+          diceleft -= 1
+          if el.hasClass('scorable')
+            if n is '1'
+              spark.tableIt(100)
+            else
+              spark.tableIt(50)
+            el.addClass('keeper')
+
 
 init()
