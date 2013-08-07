@@ -13,4 +13,4 @@
 //= require jquery
 //= require jquery_ujs
 //= require components/underscore/underscore-min
-//= require_tree .
+//= require game
