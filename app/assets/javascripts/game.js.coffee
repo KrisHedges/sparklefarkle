@@ -16,16 +16,11 @@
 # Three 6s	600
 #
 # 10,000 points to win
-
-# player 1 rolls six dice
+#
 # then player 1 must choose scoring dice to keep
 # then player 1 rolls remaining dice scores them repeating until all dice have # been scored or no scorable points arise.
-#
 # Then it is player 2's turn to do the same.
 # This will continue until the first player reaches 10,000 points
-
-dice = []
-numberOfDice = 6
 
 dice_list = $('#dice-list')
 roller = $('.roller')
@@ -33,11 +28,44 @@ player1 = $('.player1')
 player2 = $('.player2')
 
 window.spark =
+  dice: []
+  currentplayer: 1
+  player1score: 0
+  player2score: 0
+  numberOfDice: 6
+
+  setPlayer: (player)->
+    if player is 1
+      this.currentplayer = 1
+      $('.currentplayer').removeClass('currentplayer')
+      $('.player1').addClass('currentplayer')
+    if player is 2
+      this.currentplayer = 2
+      $('.currentplayer').removeClass('currentplayer')
+      $('.player2').addClass('currentplayer')
+
+  updatePlayerScore: (points)->
+    p = this.currentplayer
+    if p is 1
+      this.player1score += points
+      $('.player1 .score').html this.player1score
+    if p is 2
+      this.player2score += points
+      $('.player2 .score').html this.player2score
+
+  resetScore: ->
+    score = 0
+    this.player1score = score
+    this.player2score = score
+    $('.player1 .score').html score
+    $('.player2 .score').html score
+    this.setPlayer(1)
+
   rollDice: (n)->
-    dice = []
-    n = numberOfDice unless n != undefined
-    dice.push Math.floor(Math.random()*6 + 1) for [1..n]
-    dice
+    this.dice = []
+    n = this.numberOfDice unless n != undefined
+    this.dice.push Math.floor(Math.random()*6 + 1) for [1..n]
+    this.dice
 
   isTriple: (n, dice)->
     triples = _.filter dice, (i)->
@@ -79,22 +107,16 @@ window.spark =
     if this.isFarked(dice)
       dice_list.append("<h2>Farkle!</h2>")
 
-  setPlayer: (player)->
-    if player is 1
-      $('.currentplayer').removeClass('currentplayer')
-      $('.player1').addClass('currentplayer')
-    if player is 2
-      $('.currentplayer').removeClass('currentplayer')
-      $('.player2').addClass('currentplayer')
-
   rollEm: (n)->
-    n = numberOfDice unless n != undefined
+    n = this.numberOfDice unless n != undefined
     dice = this.rollDice(n)
     this.showDice(dice)
 
-firstRun = ->
+init = ->
+  spark.setPlayer(spark.currentplayer)
+
   roller.on 'click', ->
-    spark.rollEm(numberOfDice)
+    spark.rollEm(spark.numberOfDice)
 
   dice_list.on 'click', 'li', ->
     el = $(this)
@@ -106,7 +128,4 @@ firstRun = ->
     if el.hasClass('scorable') and not el.hasClass(triple)
       el.addClass('keeper')
 
-
-
-  spark.setPlayer(1)
-firstRun()
+init()
