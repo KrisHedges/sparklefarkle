@@ -13,4 +13,5 @@
 //= require jquery
 //= require jquery_ujs
 //= require components/underscore/underscore-min
+//= require sparklefarkle
 //= require game
