@@ -1,6 +1,7 @@
 dice_list = $('#dice-list')
 table = $('#table')
 tablescore = table.find('.score')
+leaderboard = $('#leaderboard')
 
 window.spark =
   dice: []
@@ -70,9 +71,14 @@ window.spark =
     this.resetTable()
     this.exchangeTurn()
 
+  formatScore: (score) ->
+    score.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+
   winner: (player, score)->
+    winningscore = this.formatScore(score)
     this.resetGame()
-    alert "Player #{player} Wins! #{score}"
+    leaderboard.toggleClass('hidden')
+    leaderboard.find('.highscore').html winningscore
 
   isYahtzee: (n, dice)->
     sext = _.filter dice, (i)->

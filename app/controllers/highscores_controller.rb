@@ -2,7 +2,7 @@ class HighscoresController < ApplicationController
   respond_to :json
 
   def index
-    @highscores = Highscore.find(:all)
+    @highscores = Highscore.find(:all, :order =>'score DESC', :limit => '50')
     respond_with(@highscores) do |format|
       format.json { render :json => @highscores }
     end

@@ -15,6 +15,17 @@
     %button.bank Bank
     %button.roll Roll
 
+%div#leaderboard.hidden
+  %h4 Leaderboard:
+  %form
+    %label Enter Your Initials
+    %input{:type => 'text', :maxlength => '3'}
+    %h3 Your Highscore!
+    %div.highscore 10,000
+
+    %button Done
+  %ol
+
 %div#cheatsheet
   %ul
     %li Each 1	100

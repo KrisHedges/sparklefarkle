@@ -1,6 +1,4 @@
 Sparklefarkle::Application.routes.draw do
-  resources :highscores do
-    collection {post :sort}
-  end
+  resources :highscores
   root :to => 'game#index'
 end

@@ -1,5 +1,7 @@
 dice_list = $('#dice-list')
 gameboard = $('#gameboard')
+leaderboard = $('#leaderboard')
+leaderboard_list = leaderboard.find('ol')
 
 $(document).ready ->
   init = ->
@@ -46,4 +48,16 @@ $(document).ready ->
               el.addClass('keeper')
       if spark.diceleft is 0
         alert "Hot Dice! You can roll em all again."
+
+    fetchLeaders = ->
+      $.getJSON '/highscores', (data)->
+        _.each data, (data)->
+          leaderboard_list.append("<li>#{data.name} - #{data.score}</li>")
+    fetchLeaders()
+
+
+
+
+
+
   init()
