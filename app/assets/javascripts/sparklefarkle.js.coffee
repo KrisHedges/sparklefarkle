@@ -75,10 +75,16 @@ window.spark =
     score.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")
 
   winner: (player, score)->
+    highscore = leaderboard.find('.highscore')
     winningscore = this.formatScore(score)
+    playerscore = "<span data-value='#{score}'>#{winningscore}</span>"
     this.resetGame()
+    leaderboard.find('form').show()
+    leaderboard.find('form h3').html "<h3>Player #{player} Wins! New Highscore.</h3>"
     leaderboard.toggleClass('hidden')
-    leaderboard.find('.highscore').html winningscore
+    highscore.html playerscore
+
+
 
   isYahtzee: (n, dice)->
     sext = _.filter dice, (i)->

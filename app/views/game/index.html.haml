@@ -16,14 +16,15 @@
     %button.roll Roll
 
 %div#leaderboard.hidden
+  %span.close Play Again!
   %h4 Leaderboard:
   %form
+    %h3
     %label Enter Your Initials
     %input{:type => 'text', :maxlength => '3'}
-    %h3 Your Highscore!
-    %div.highscore 10,000
-
-    %button Done
+    %div.highscore
+      %span 10,000
+    %button Submit Your Initials & Score
   %ol
 
 %div#cheatsheet

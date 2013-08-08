@@ -50,10 +50,31 @@ $(document).ready ->
         alert "Hot Dice! You can roll em all again."
 
     fetchLeaders = ->
+      leaderboard_list.empty()
+
       $.getJSON '/highscores', (data)->
         _.each data, (data)->
           leaderboard_list.append("<li>#{data.name} - #{data.score}</li>")
     fetchLeaders()
+    leaderboard.on 'click', '.close', ->
+      leaderboard.toggleClass('hidden')
+
+    leaderboard.on 'click', 'button', (e)->
+      e.preventDefault()
+      name = leaderboard.find("form input[type='text']").val()
+      score = leaderboard.find('.highscore span').attr('data-value')
+      $.ajax
+        type: 'POST'
+        contentType: 'application/json'
+        dataType: 'json'
+        url: '/highscores'
+        data: JSON.stringify {name: name, score: score}
+        success: ->
+          leaderboard.find('form')[0].reset()
+          leaderboard.find('form').hide()
+          fetchLeaders()
+
+
 
 
 
