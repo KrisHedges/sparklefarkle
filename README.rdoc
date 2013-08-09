@@ -3,7 +3,7 @@
 SparkleFarkle is a web-based farkle game created with Ruby on Rails and a hefty
 dose of javascript. You can see a demo of the app running at:
 
-     http://sparklefarkle.herokuapp.com
+http://sparklefarkle.herokuapp.com
 
 == Getting Started
 
