@@ -163,7 +163,10 @@ window.spark =
     if diceinplay.length is 0
       throwEm(this)
     else
-      throwEm(this) unless dice_list.find('li').hasClass('keeper') is false
+      if dice_list.find('li').hasClass('keeper') is false
+        spark.notify "You must choose at least one die to table."
+      else
+        throwEm(this)
 
   playerMove:
     isYahtzee: (el)->
