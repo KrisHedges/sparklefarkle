@@ -59,7 +59,7 @@ html, body
     top 0
     display inline-block
     float right
-    width 30px
+    width 50px
     height 100%
     text-align center
     cursor pointer
@@ -78,6 +78,7 @@ html, body
   height 100%
   background url('/assets/noise.png'), linear-gradient(from top to bottom, lighter-color3, lighten(lighter-color3,96%))
   background-repeat repeat, no-repeat
+  overflow visible
   z-index 1
 
 #gameboard
@@ -193,15 +194,30 @@ html, body
 #cheatsheet
   position absolute
   display block
-  top 70px
+  top 1.1em
   right 16px
   width 300px
-  background darker-color1
+  background bg = rgba(darker-color1,90%)
   color white
   font-size .9em
   cursor pointer
   padding 1em 1em 1.2em 1em
-  z-index 3
+  border-radius 3px
+  z-index 4
+  &:before
+    position relative
+    content ''
+    display block
+    top -29px
+    left 93%
+    display block
+    width 0px
+    height 0px
+    border-left 10px solid transparent
+    border-right 10px solid transparent
+    border-bottom 15px solid bg
+
+
   p
     text-align center
   ul
