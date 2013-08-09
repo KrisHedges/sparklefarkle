@@ -17,37 +17,13 @@ $(document).ready ->
 
     dice_list.on 'click', 'li', ->
       el = $(this)
-      n = el.attr('data-value')
-      yahtzees = $(".yahtzee")
-      triple = "triple" +n
-      triples = $("."+triple+":lt(3)")
-      beyondtriple = $("."+triple+":gt(2)")
-      if el.hasClass('yahtzee')
-        spark.bankIt(1000000)
-      if el.hasClass('scorable')
-        unless el.hasClass('keeper')
-          if el.hasClass(triple)
-            spark.diceleft -= 3
-            if n is '1'
-              spark.tableIt(1000)
-              beyondtriple.removeClass(triple)
-            else if n is '5'
-              spark.tableIt(n * 100)
-              beyondtriple.removeClass(triple)
-            else
-              spark.tableIt(n * 100)
-              beyondtriple.removeClass('scorable ' + triple)
-            triples.addClass('keeper')
-          unless el.hasClass(triple)
-            spark.diceleft -= 1
-            if el.hasClass('scorable')
-              if n is '1'
-                spark.tableIt(100)
-              else
-                spark.tableIt(50)
-              el.addClass('keeper')
-      if spark.diceleft is 0
-        alert "Hot Dice! You can roll em all again."
+      value = el.attr('data-value')
+      triple = "triple" +value
+      unless el.hasClass('keeper')
+        spark.playerMove.isYahtzee(el)
+        spark.playerMove.isTriplePoints(el, value, triple)
+        spark.playerMove.isSinglePoints(el, value, triple)
+      spark.playerMove.isHotDice()
 
     fetchLeaders = ->
       leaderboard_list.empty()
@@ -55,7 +31,6 @@ $(document).ready ->
         _.each data, (data)->
           score = spark.formatScore(data.score)
           leaderboard_list.append("<li>#{data.name} - #{score}</li>")
-
 
     leaderboard.on 'click', '.close', ->
       leaderboard.toggleClass('hidden')

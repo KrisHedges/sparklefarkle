@@ -153,3 +153,38 @@ window.spark =
       throwEm(this)
     else
       throwEm(this) unless dice_list.find('li').hasClass('keeper') is false
+
+  playerMove:
+    isYahtzee: (el)->
+      if el.hasClass('yahtzee')
+        spark.bankIt(1000000)
+
+    isTriplePoints: (el, value, triple)->
+      triples = $("."+triple+":lt(3)")
+      beyondtriple = $("."+triple+":gt(2)")
+      if el.hasClass('scorable') and el.hasClass(triple)
+        spark.diceleft -= 3
+        triples.addClass('keeper')
+        if value is '1'
+          spark.tableIt(1000)
+          beyondtriple.removeClass(triple)
+        else if value is '5'
+          spark.tableIt(value * 100)
+          beyondtriple.removeClass(triple)
+        else
+          spark.tableIt(value * 100)
+          beyondtriple.removeClass('scorable ' + triple)
+
+    isSinglePoints: (el,value, triple)->
+      unless el.hasClass(triple)
+        spark.diceleft -= 1
+        if el.hasClass('scorable')
+          if value is '1'
+            spark.tableIt(100)
+          else
+            spark.tableIt(50)
+          el.addClass('keeper')
+
+    isHotDice: ->
+      if spark.diceleft is 0
+        alert "Hot Dice! You can roll em all again."
