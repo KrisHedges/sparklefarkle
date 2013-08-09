@@ -145,7 +145,9 @@ window.spark =
         dice_list.append("<li data-value='#{n}'></li>")
     if this.isFarked(dice)
       spark.notify "Farkle! No Playable Dice. You've lost your Turn & Table."
-      this.exchangeTurn()
+      setTimeout ->
+        spark.exchangeTurn()
+      , 2650
 
   rollDice: (n)->
     this.dice = []
