@@ -51,11 +51,12 @@ $(document).ready ->
 
     fetchLeaders = ->
       leaderboard_list.empty()
-
       $.getJSON '/highscores', (data)->
         _.each data, (data)->
-          leaderboard_list.append("<li>#{data.name} - #{data.score}</li>")
-    fetchLeaders()
+          score = spark.formatScore(data.score)
+          leaderboard_list.append("<li>#{data.name} - #{score}</li>")
+
+
     leaderboard.on 'click', '.close', ->
       leaderboard.toggleClass('hidden')
 

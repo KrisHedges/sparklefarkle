@@ -2,7 +2,7 @@ class HighscoresController < ApplicationController
   respond_to :json
 
   def index
-    @highscores = Highscore.find(:all, :order =>'score DESC', :limit => '50')
+    load_highscores
     respond_with(@highscores) do |format|
       format.json { render :json => @highscores }
     end
@@ -11,7 +11,7 @@ class HighscoresController < ApplicationController
   def create
     @highscore = Highscore.new(params[:highscore])
     if @highscore.save
-      @highscores = Highscore.order('created_at')
+      load_highscores
       respond_with(@highscores) do |format|
         format.json { render :json => @highscores }
       end
