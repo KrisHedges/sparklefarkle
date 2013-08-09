@@ -18,7 +18,8 @@ window.spark =
     this.notice.toggleClass('hidden')
     setTimeout ->
       spark.notice.toggleClass('hidden')
-    , 2000
+    #like the Atari
+    , 2600
 
   setPlayer: (player)->
     if player is 1
