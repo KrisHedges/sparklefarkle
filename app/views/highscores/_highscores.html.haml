@@ -1,0 +1,3 @@
+%ol
+  - @highscores.each do |highscore|
+    %li #{highscore.name} - #{number_with_delimiter(highscore.score, :delimiter => ',')}
