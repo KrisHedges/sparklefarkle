@@ -3,24 +3,12 @@ class HighscoresController < ApplicationController
 
   def index
     load_highscores
-    respond_with(@highscores) do |format|
-      format.json { render :json => @highscores }
-    end
+    respond_with(@highscores)
   end
 
   def create
-    @highscore = Highscore.new(params[:highscore])
-    if @highscore.save
-      load_highscores
-      respond_with(@highscores) do |format|
-        format.json { render :json => @highscores }
-      end
-    else
-      @errors = @highscore.errors.full_messages
-      respond_with(@errors) do |format|
-        format.json { render :json => @errors }
-      end
-    end
+    @highscore = Highscore.create(params[:highscore])
+    respond_with(@highscore)
   end
 
 end

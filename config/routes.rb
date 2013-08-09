@@ -1,5 +1,4 @@
 Sparklefarkle::Application.routes.draw do
-  get '/highscores', :to => 'highscores#index'
-  post '/highscores', :to => 'highscores#create'
+  resources :highscores
   root :to => 'game#index'
 end
