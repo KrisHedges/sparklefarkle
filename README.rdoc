@@ -26,7 +26,7 @@ dose of javascript.
 == Testing SparkleFarkle
 
 The app includes some javascript tests for the many of the core parts of the game.
-They were created using mocah and chai through the konacha gem and are located in the <tt>spec/</tt> directory.
+They were created using mocha & chai through the konacha gem and are located in the <tt>spec/</tt> directory.
 
 1. To run the tests, at the command prompt:
 
