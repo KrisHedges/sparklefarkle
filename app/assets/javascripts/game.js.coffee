@@ -23,7 +23,7 @@ $(document).ready ->
       triples = $("."+triple+":lt(3)")
       beyondtriple = $("."+triple+":gt(2)")
       if el.hasClass('yahtzee')
-        spark.winner(1,"Via Nuclear Yahtzee! 1,000,000 points")
+        spark.bankIt(1000000)
       if el.hasClass('scorable')
         unless el.hasClass('keeper')
           if el.hasClass(triple)
