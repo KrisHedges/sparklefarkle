@@ -6,15 +6,19 @@ dose of javascript.
 == Getting Started
 
 1. At the command prompt, you'll first need clone this repository.
+
    <tt>git clone http://github.com/InkSpeck/sparklefarkle.git</tt>
 
 2. Change directory to <tt>sparklefarkle</tt> and install all of the gems you'll need to run it:
+
    <tt>bundle install</tt>
 
 3. Create the database for the leaderboard.
+
    <tt>bundle exec rake db:migrate</tt>
 
 4. Now you should be able to start up the server with:
+
    <tt>rails s</tt>
 
 5. Go to http://localhost:3000/ and you should see the game running in your browser.
@@ -25,6 +29,7 @@ The app includes some javascript tests for the many of the core parts of the gam
 They were created using mocah and chai through the konacha gem and are located in the <tt>spec/</tt> directory.
 
 1. To run the tests, at the command prompt:
+
    <tt>bundle exec rake konacha:serve</tt>
 
 2. Then in your browser go to http://localhost:3500 and you should see the test output.
