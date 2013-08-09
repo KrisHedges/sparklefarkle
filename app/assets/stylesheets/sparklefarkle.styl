@@ -3,55 +3,116 @@
 html, body
   width 100%
   height 100%
+  transform rotate3d(0,0,0)
+  user-select none
+
+#notice
+  grid(100%, 100%)
+  position absolute
+  top 0px
+  left 0px
+  height 100%
+  margin 0 auto
+  background rgba(black,40%)
+  z-index 3
+  transition all 100ms linear
+  color white
+  font-size 1.2em
+  line-height 1.2em
+  font-weight bold
+  &:after
+    position absolute
+    top 50%
+    left 48%
+    width auto
+    height auto
+    padding 3em
+    background white
+    color darker-color1
+    transform translate(-50%,-50%)
+    content attr(data-message)
+
+#game-details
+  topbar()
+  min-width 960px
+  font-size .9em
+  .player1, .player2
+    grid-space(25%)
+    min-width 220px
+    position relative
+    h3
+      display inline-block
+      margin-left 2em
+    .score
+      display inline-block
+  .currentplayer
+    color white
+    &:before
+      position absolute
+      top 50%
+      margin 0
+      padding 0
+      transform translate(0.5em,-50%)
+      content '\2192'
+  #showrules
+    position relative
+    top 0
+    display inline-block
+    float right
+    width 30px
+    height 100%
+    text-align center
+    cursor pointer
+    &:before
+      position absolute
+      top 50%
+      display block
+      transform translate(0,-51%)
+      font-size 1.8em
+      font-weight bold
+      content '?'
 
 #container
-  grid(100%, 100%)
+  grid(100%, 960px)
+  topbarfix()
   height 100%
   background url('/assets/noise.png'), linear-gradient(from top to bottom, lighter-color3, lighten(lighter-color3,96%))
   background-repeat repeat, no-repeat
-
-#game-details
-  grid-space 15%
-  .player1, .player2
-    position relative
-    h3
-      text-align center
-  .score
-    width 100%
-    text-align center
-  .currentplayer
-    &:before
-      position absolute
-      left 1em
-      top 0.5em
-      content '->'
+  z-index 1
 
 #gameboard
-  grid-space 65%
-  margin-top 3em
+  grid-space 80%
   user-select none
+  text-align center
+  margin 0 12% 0 8%
+  padding 0
   #dice-list
-    grid-space 80%
-    margin 0 10%
-    height 30%
-    h2
+    margin 0 auto
+    height 200px
+    list-style none outside none
+    text-align center
+    h1
+      position absolute
       display block
+      top 2em
       width 100%
-      height 100%
+      padding 0
+      margin 0
+      text-align center
     .roller
       cursor pointer
       text-align center
     li
       position relative
-      display block
-      float left
+      display inline-block
       list-style none
       width 70px
       height 70px
-      margin 1em
+      margin 3em 16px 0 16px
       border 1px solid black
       text-align center
       user-select none
+      transition all 80ms linear
       &.scorable
         background green
         cursor pointer
@@ -66,25 +127,87 @@ html, body
         background red
       &.keeper
         background white
-        margin-top 4em
-      &:before
-        position absolute
-        top 50%
-        left 50%
-        transform translate(-50%,-50%)
-        content attr(data-value)
+        top 90px
+      &[data-value='1']
+        &:before
+          content '\2022'
+        &:after
+          position absolute
+          top 50%
+          left 50%
+          transform translate(-50%, -50%)
+          content '1'
+      &[data-value='2']
+        &:before
+          content '\2022  \2022'
+        &:after
+          position absolute
+          top 50%
+          left 50%
+          transform translate(-50%, -50%)
+          content '2'
+      &[data-value='3']
+        &:before
+          content '\2022  \2022  \2022'
+        &:after
+          position absolute
+          top 50%
+          left 50%
+          transform translate(-50%, -50%)
+          content '3'
+      &[data-value='4']
+        &:before
+          content '\2022  \2022  \2022  \2022'
+        &:after
+          position absolute
+          top 50%
+          left 50%
+          transform translate(-50%, -50%)
+          content '4'
+      &[data-value='5']
+        &:before
+          content '\2022  \2022  \2022  \2022  \2022'
+        &:after
+          position absolute
+          top 50%
+          left 50%
+          transform translate(-50%, -50%)
+          content '5'
+      &[data-value='6']
+        &:before
+          content '\2022  \2022  \2022  \2022  \2022  \2022'
+        &:after
+          position absolute
+          top 50%
+          left 50%
+          transform translate(-50%, -50%)
+          content '6'
   #table
-    grid-space 50%
-    height 50%
+    grid-space 100%
+    text-align center
+    margin-top 2%
+    height 49%
+    .score
+      margin 0
 
 #cheatsheet
-  grid-space 20%
+  position absolute
+  display block
+  top 70px
+  right 16px
+  width 300px
+  background darker-color1
+  color white
   font-size .9em
+  cursor pointer
+  padding 1em 1em 1.2em 1em
+  z-index 3
+  p
+    text-align center
   ul
     margin 1em
     li
-      list-style none
-      margin 0
+      margin 0 auto 0 2.5em
 
 #leaderboard
   grid 100% 100%
@@ -93,15 +216,31 @@ html, body
   left 0
   height 100%
   z-index 2
-  background lighter-color1
+  background darker-color2
   color white
   transition all 100ms linear
+  text-align center
+  scrollable()
   form
+    margin 0
     display none
-  .close
-    cursor pointer
+    input
+      width 70px
+      text-align center
+  #leaderlist
+   width 400px
+   margin 0 auto
+   column-count 2
+   column-gap 1em
+  ol
+   text-align left
+   font-size .8em
+
+.removed
+  display none
 
 .hidden
+  position absolute !important
   visibility hidden
   opacity 0
   z-index -1

@@ -11,6 +11,15 @@
     = stylesheet_link_tag "application"
     = csrf_meta_tags
   %body
+    %div#notice.hidden
+    %div#game-details
+      %div.player1
+        %h3 Player 1
+        %div.score 0
+      %div.player2
+        %h3 Player 2
+        %div.score 0
+      %div#showrules
     %div#container
       = yield
   = javascript_include_tag "application"

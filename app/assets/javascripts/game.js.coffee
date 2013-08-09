@@ -1,11 +1,17 @@
 dice_list = $('#dice-list')
 gameboard = $('#gameboard')
+showrules = $('#showrules')
+cheatsheet = $('#cheatsheet')
 leaderboard = $('#leaderboard')
 leaderboard_list = leaderboard.find('ol')
 
 $(document).ready ->
   init = ->
-    spark.setPlayer(spark.currentplayer)
+    showrules.on 'click',->
+      cheatsheet.toggleClass('hidden')
+
+    cheatsheet.on 'click',->
+      $(this).toggleClass('hidden')
 
     gameboard.on 'click', '.roller, .roll', ->
       if spark.diceleft is 0
@@ -32,13 +38,13 @@ $(document).ready ->
           score = spark.formatScore(data.score)
           leaderboard_list.append("<li>#{data.name} - #{score}</li>")
 
-    leaderboard.on 'click', '.close', ->
+    leaderboard.on 'click', '#close', ->
       leaderboard.toggleClass('hidden')
 
-    leaderboard.on 'click', 'button', (e)->
+    leaderboard.on 'click', '#submit', (e)->
       e.preventDefault()
       name = leaderboard.find("form input[type='text']").val()
-      score = leaderboard.find('.highscore span').attr('data-value')
+      score = leaderboard.find('.highscore #winningscore').attr('data-value')
       $.ajax
         type: 'POST'
         contentType: 'application/json'
@@ -48,6 +54,8 @@ $(document).ready ->
         success: ->
           leaderboard.find('form')[0].reset()
           leaderboard.find('form').hide()
+          leaderboard.find('.message').hide()
+          leaderboard.find('.highscore').hide()
           fetchLeaders()
 
 

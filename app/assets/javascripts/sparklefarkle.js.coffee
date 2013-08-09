@@ -4,6 +4,7 @@ tablescore = table.find('.score')
 leaderboard = $('#leaderboard')
 
 window.spark =
+  notice: $('#notice')
   dice: []
   currentplayer: 1
   table: 0
@@ -11,6 +12,13 @@ window.spark =
   player2score: 0
   numberOfDice: 6
   diceleft: 6
+
+  notify: (message)->
+    this.notice.attr('data-message',message)
+    this.notice.toggleClass('hidden')
+    setTimeout ->
+      spark.notice.toggleClass('hidden')
+    , 2000
 
   setPlayer: (player)->
     if player is 1
@@ -75,15 +83,17 @@ window.spark =
     score.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")
 
   winner: (player, score)->
-    highscore = leaderboard.find('.highscore')
+    leaderboard = $('#leaderboard')
     winningscore = this.formatScore(score)
-    playerscore = "<span data-value='#{score}'>#{winningscore}</span>"
+    leaderboard.find('.message').html "<h3>Player #{player} Wins!</h3>"
+    highscore = leaderboard.find('.highscore')
+    playerscore = "<h5 id='winningscore' data-value='#{score}'>New Highscore: #{winningscore}</span>"
+    highscore.html playerscore
     this.resetGame()
     leaderboard.find('form').show()
-    leaderboard.find('form h3').html "<h3>Player #{player} Wins! New Highscore.</h3>"
+    leaderboard.find('.message').show()
+    leaderboard.find('.highscore').show()
     leaderboard.toggleClass('hidden')
-    highscore.html playerscore
-
 
 
   isYahtzee: (n, dice)->
@@ -133,7 +143,7 @@ window.spark =
       else
         dice_list.append("<li data-value='#{n}'></li>")
     if this.isFarked(dice)
-      alert "Farkle! You've lost it all!"
+      spark.notify "Farkle! No Playable Dice. You've lost your Turn & Table."
       this.exchangeTurn()
 
   rollDice: (n)->
@@ -187,4 +197,8 @@ window.spark =
 
     isHotDice: ->
       if spark.diceleft is 0
-        alert "Hot Dice! You can roll em all again."
+        spark.notify "Hot Dice! You can roll all 6 dice again."
+
+init = ->
+  spark.setPlayer(spark.currentplayer)
+init()
