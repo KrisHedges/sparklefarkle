@@ -4,6 +4,7 @@ showrules = $('#showrules')
 cheatsheet = $('#cheatsheet')
 leaderboard = $('#leaderboard')
 leaderboard_list = leaderboard.find('ol')
+submit = $('#submit')
 
 $(document).ready ->
   init = ->
@@ -43,10 +44,12 @@ $(document).ready ->
     leaderboard.on 'click', '#close', ->
       leaderboard.toggleClass('hidden')
 
-    leaderboard.on 'click', '#submit', (e)->
+    leaderboard.find('form').submit (e)->
       e.preventDefault()
       name = leaderboard.find("form input[type='text']").val()
       score = leaderboard.find('.highscore #winningscore').attr('data-value')
+      submit.prop 'disabled', true
+      submit.addClass 'spinner'
       $.ajax
         type: 'POST'
         contentType: 'application/json'
@@ -54,6 +57,8 @@ $(document).ready ->
         url: '/highscores'
         data: JSON.stringify {name: name, score: score}
         success: ->
+          submit.prop 'disabled', false
+          submit.removeClass 'spinner'
           leaderboard.find('form')[0].reset()
           leaderboard.find('form').hide()
           leaderboard.find('.message').hide()
