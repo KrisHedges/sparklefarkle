@@ -96,36 +96,35 @@ window.spark =
     leaderboard.find('.highscore').show()
     leaderboard.toggleClass('hidden')
 
-
-  isYahtzee: (n, dice)->
+  isYahtzee: (num, dice)->
     sext = _.filter dice, (i)->
-        n is i
+        num is i
     if sext.length is 6
       true
     else
       false
 
-  isTriple: (n, dice)->
+  isTriple: (num, dice)->
     triples = _.filter dice, (i)->
-        n is i
+        num is i
     if triples.length >= 3
       true
     else
       false
 
-  isScorable: (n)->
-      if n is 1
+  isScorable: (num)->
+      if num is 1
         true
-      else if n is 5
+      else if num is 5
         true
       else
         false
 
   isFarked: (dice)->
-    farked = _.every dice, (n)->
-      if spark.isScorable(n)
+    farked = _.every dice, (num)->
+      if spark.isScorable(num)
         false
-      else if spark.isTriple(n, dice)
+      else if spark.isTriple(num, dice)
         false
       else
         true
@@ -134,33 +133,33 @@ window.spark =
 # showDice Needs test
   showDice: (dice)->
     dice_list.empty()
-    for n in dice
-      if this.isYahtzee(n,dice)
-        dice_list.append("<li data-value='#{n}' class='yahtzee'></li>")
-      else if this.isTriple(n, dice)
-        dice_list.append("<li data-value='#{n}' class='scorable triple#{n}'></li>")
-      else if this.isScorable(n)
-        dice_list.append("<li data-value='#{n}' class='scorable'></li>")
+    for num in dice
+      if this.isYahtzee(num,dice)
+        dice_list.append("<li data-value='#{num}' class='yahtzee'></li>")
+      else if this.isTriple(num, dice)
+        dice_list.append("<li data-value='#{num}' class='scorable triple#{num}'></li>")
+      else if this.isScorable(num)
+        dice_list.append("<li data-value='#{num}' class='scorable'></li>")
       else
-        dice_list.append("<li data-value='#{n}'></li>")
+        dice_list.append("<li data-value='#{num}'></li>")
     if this.isFarked(dice)
       spark.notify "Farkle! No Playable Dice. You've lost your Turn & Table."
       setTimeout ->
         spark.exchangeTurn()
       , 2650
 
-  rollDice: (n)->
+  rollDice: (num)->
     this.dice = []
-    n = this.numberOfDice unless n != undefined
-    this.dice.push Math.floor(Math.random()*6 + 1) for [1..n]
+    num = this.numberOfDice unless num != undefined
+    this.dice.push Math.floor(Math.random()*6 + 1) for [1..num]
     this.dice
 
 # rollEm needs test
-  rollEm: (n)->
+  rollEm: (num)->
     diceinplay = dice_list.find('li')
     throwEm = (ctx)->
-      n = ctx.numberOfDice unless n != undefined
-      dice = ctx.rollDice(n)
+      num = ctx.numberOfDice unless num != undefined
+      dice = ctx.rollDice(num)
       ctx.showDice(dice)
     if diceinplay.length is 0
       throwEm(this)
