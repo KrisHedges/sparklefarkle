@@ -33,7 +33,7 @@ SparkleFarkle is a web-based 2 player (in-person) farkle game created using Ruby
 
 5. Go to http://localhost:3000/ and you should see the game running in your browser.
 
-6. Have Fun playing farkle with a friend!
+6. Have fun playing sparklefarkle with a friend!
 
 ## Testing SparkleFarkle
 
