@@ -1,7 +1,6 @@
 == SparkleFarkle
 
-SparkleFarkle is a web-based farkle game created with Ruby on Rails and a hefty
-dose of javascript. You can see a demo of the app running at:
+SparkleFarkle is a web-based farkle game created with Ruby on Rails and a fairly hefty dose of javascript. You can see a demo of the app running at:
 
 http://sparklefarkle.herokuapp.com
 
@@ -9,19 +8,19 @@ http://sparklefarkle.herokuapp.com
 
 1. At the command prompt, you'll first need clone this repository.
 
-   <tt>git clone http://github.com/InkSpeck/sparklefarkle.git</tt>
+   git clone git://github.com/InkSpeck/sparklefarkle.git
 
 2. Change directory to <tt>sparklefarkle</tt> and install all of the gems you'll need to run it:
 
-   <tt>bundle install</tt>
+   bundle install
 
 3. Create the database for the leaderboard.
 
-   <tt>bundle exec rake db:migrate</tt>
+   bundle exec rake db:migrate
 
 4. Now you should be able to start up the server with:
 
-   <tt>rails s</tt>
+   rails s
 
 5. Go to http://localhost:3000/ and you should see the game running in your browser.
 
@@ -32,6 +31,6 @@ They were created using mocha & chai through the konacha gem and are located in 
 
 1. To run the tests, at the command prompt:
 
-   <tt>bundle exec rake konacha:serve</tt>
+   bundle exec rake konacha:serve
 
 2. Then in your browser go to http://localhost:3500 and you should see the test output.
