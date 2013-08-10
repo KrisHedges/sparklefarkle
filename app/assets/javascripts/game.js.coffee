@@ -25,11 +25,13 @@ $(document).ready ->
       el = $(this)
       value = el.attr('data-value')
       triple = "triple" +value
-      unless el.hasClass('keeper')
+      if el.hasClass('keeper')
+        spark.notify "Sorry, once you've tabled a die you can't return it. So take your time and choose wisely..."
+      else
         spark.playerMove.isYahtzee(el)
         spark.playerMove.isTriplePoints(el, value, triple)
         spark.playerMove.isSinglePoints(el, value, triple)
-      spark.playerMove.isHotDice()
+        spark.playerMove.isHotDice()
 
     fetchLeaders = ->
       leaderboard_list.empty()
@@ -57,12 +59,4 @@ $(document).ready ->
           leaderboard.find('.message').hide()
           leaderboard.find('.highscore').hide()
           fetchLeaders()
-
-
-
-
-
-
-
-
   init()
